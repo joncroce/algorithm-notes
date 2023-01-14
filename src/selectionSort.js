@@ -1,4 +1,5 @@
 // Implementation based on Aditya Bhargava's "Grokking Algorithms" book.
+// Running time is O(n*n)
 
 function findSmallest(arr) {
 	let minValue = arr[0],
@@ -21,6 +22,8 @@ function selectionSort(arr) {
     }
     return newArr;
 }
+
+// Test with array of random integers
 
 const unsorted = Array.from({ length: 20 }, () => Math.floor(Math.random() * 100));
 
