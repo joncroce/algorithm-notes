@@ -74,7 +74,10 @@ function dijkstra(graph, startNode, finishNode) {
 		node = findLowestCostNode();
 	}
 
-	return calculatePath();
+	const path = calculatePath();
+	const weight = costsTable[finishNode];
+
+	return `Weight: ${weight}, Path: ${path}`;
 
 	function buildCostsTable() {
 		return Object.keys(graph).reduce((costs, currentNode) => {
@@ -125,4 +128,92 @@ function dijkstra(graph, startNode, finishNode) {
 }
 
 // Test
+
+// The example from above...
+// Answer: Weight: 6, Path: start -> b -> a -> finish
 console.log(dijkstra(exampleGraph, 'start', 'finish'));
+
+// The following are exercises from section 7.1 of "Grokking Algorithms" (p. 139)
+
+/* Exercise A: A more complex graph.
+*
+*        [A]>>>4>>>[C]
+*       ^ ^ v       v v
+*      5  ^  v      v  2
+*     ^   ^   v     v   v
+* [start] 8    2    6 [finish]
+*     v   ^     v   v   ^
+*      2  ^      v  v  1
+*       v ^       v v ^
+*        [B]>>>7>>>[D]
+*
+* Answer: Weight: 8, Path: start -> a -> d -> finish
+*/
+
+const exampleGraphA = {
+	'start': {
+		'a': 5,
+		'b': 2,
+	},
+	'a': {
+		'c': 4,
+		'd': 2,
+	},
+	'b': {
+		'a': 8,
+		'd': 7,
+	},
+	'c': {
+		'd': 6,
+		'finish': 2,
+	},
+	'd': {
+		'finish': 1,
+	},
+	'finish': {},
+};
+
+console.log(dijkstra(exampleGraphA, 'start', 'finish'));
+
+/* Exercise B: A graph with a cycle.
+*
+* [start]>>>10>>>[A]>>20>>>[B]>>>30>>>[Finish]
+*                  ^       v
+*                   1     1 
+*                    ^   v
+*                     [C]
+*
+* Answer: Weight: 60, Path: start -> a -> b -> finish
+*/
+
+const exampleGraphB = {
+	'start': {
+		'a': 10,
+	},
+	'a': {
+		'b': 20,
+	},
+	'b': {
+		'c': 1,
+		'finish': 30,
+	},
+	'c': {
+		'a': 1,
+	},
+	'finish': {},
+};
+
+console.log(dijkstra(exampleGraphB, 'start', 'finish'));
+
+/* Exercise C: A graph with negative weights.
+*
+*	[start]>>2>>[B]>>2>>[finish]
+*     v       ^ v      ^
+*      2     2   2    2
+*       v   ^     v  ^
+*        [A]<<-1<<[C]
+*
+* Answer: Trick question. 
+*         Dijkstra's algorithm can't detect a shortest path with negative-weight cycles!
+*         Use Bellman-Ford algorithm instead.
+*/
